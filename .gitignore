@@ -1,3 +1,4 @@
 poetry.lock
 pyproject.toml
 client/credentials.yaml
+*.pyc
