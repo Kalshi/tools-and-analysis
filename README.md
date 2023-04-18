@@ -35,4 +35,11 @@ Note that this file is GitIgnored, to prevent accidental commits.
 
 ## Projects
 
+### Market Surprise Calculator
+Explores how Kalshi markets can be used to measure market conensus.
+Builds a simplified calculator that predicts S&P changes given a CPI forecast.
+
+Please note: This calculator should be treated purely as an educational tool, and
+its outputs are not investment advice.
+
 ### Oscars 2023 Predictions ([OSCARPIC-23](https://kalshi.com/events/OSCARPIC-23))
