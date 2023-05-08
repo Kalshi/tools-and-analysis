@@ -6,7 +6,7 @@ If you have anything you'd like to contribute, please open a PR and a member of 
 
 ## Background
 
-Kalshi is a CFTC regulated exchange for [event contracts](https://kalshi.com/learn/what-is-event-contract) which ask yes or no questions about the future. For example, Kalshi lists contracts on [future interest rates](https://kalshi.com/events/economics), weather events, and scientific discoveries.
+Kalshi is a CFTC regulated exchange for [event contracts](https://kalshi.com/learn/what-is-event-contract) which asks yes or no questions about the future. For example, Kalshi lists contracts on [future interest rates](https://kalshi.com/events/economics), weather events, and scientific discoveries.
 
 As every trader is incentivized to price contracts accurately, the markets become valuable forecasting tools. Projects in this repo try to leverage this data to learn about the future.
 
