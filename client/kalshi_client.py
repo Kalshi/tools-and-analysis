@@ -3,9 +3,7 @@ import yaml
 
 
 class AuthedApiInstance(kalshi_python.ApiInstance):
-    def __init__(self):
-        config = kalshi_python.Configuration()
-
+    def __init__(self, config=kalshi_python.Configuration()):
         try:
             creds = yaml.safe_load(open("client/credentials.yaml"))
         except FileNotFoundError:
@@ -20,5 +18,9 @@ class AuthedApiInstance(kalshi_python.ApiInstance):
 
         super().__init__(configuration=config)
 
-        loginResponse = self.login(kalshi_python.LoginRequest(email=creds["username"], password=creds["password"]))
+        loginResponse = self.login(
+            kalshi_python.LoginRequest(
+                email=creds["username"], password=creds["password"]
+            )
+        )
         self.set_api_token(loginResponse.token)
