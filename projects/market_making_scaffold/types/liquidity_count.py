@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from market_making_scaffold.types.side import Side
+from projects.market_making_scaffold.types.side import Side
 
 
 @dataclass
