@@ -1,22 +1,20 @@
-from typing import Dict, List
-from kalshi_python.models import Order
-from client.kalshi_client import AuthedApiInstance
-
-from collections import defaultdict
-from projects.market_making_scaffold.types import liquidity_count
+import traceback
 from abc import abstractmethod
+from time import sleep
+from typing import List
+
+from kalshi_python.models import GetOrdersResponse, Order
+
+from client.kalshi_client import AuthedApiInstance
+from projects.market_making_scaffold.types import liquidity_count
 
 
 class MarketMaker:
-    def __init__(self, client: AuthedApiInstance):
-        """
-        Hook into websockets to keep track of resting orders.
-        """
+    def __init__(self, client: AuthedApiInstance, is_advanced=False):
+        # TODO: Setup a thread which maintains resting orders through
+        # websockets.
         self.client = client
-        self.resting_orders_by_market: Dict[str, List[Order]] = defaultdict(list)
-
-        # TODO: Setup a thread which maintains resting orders through websockets.
-        client.get_orders()
+        self.is_advanced = is_advanced
 
     @abstractmethod
     def get_desired_book(
@@ -41,10 +39,37 @@ class MarketMaker:
         Given a market ticker, refresh the market.
         """
         desired_book = self.get_desired_book(market_ticker)
-        resting_orders = self.client.get_orders(ticker=market_ticker, status="resting")
+        resting_orders: GetOrdersResponse = self.client.get_orders(
+            ticker=market_ticker, status="resting"
+        )
+
+        # Necessary until the Python package is fixed
+        for o in resting_orders.orders:
+            del o["order_group_id"]
 
         self.update_book(
             market_ticker,
-            resting_orders,
+            [Order(**o) for o in resting_orders.orders],
             desired_book,
         )
+
+    @abstractmethod
+    def execute(self) -> None:
+        """
+        Run the market maker.
+        """
+        pass
+
+    def safe_execute(self) -> None:
+        """
+        Run the market maker with protections in place, logging and restarting
+        in the case of errors.
+        """
+        while True:
+            try:
+                self.execute()
+            except Exception:
+                print(traceback.format_exc())
+
+                sleep(60)
+                print("Restarting market maker...")
